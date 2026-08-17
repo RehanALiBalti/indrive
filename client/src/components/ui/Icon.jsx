@@ -1,0 +1,96 @@
+/**
+ * Inline SVG icon set. Kept in-repo rather than pulling an icon package so the
+ * bundle stays small and every icon renders without a network request.
+ * Icon names are referenced from CMS content (section items use `icon`).
+ */
+const PATHS = {
+  plane: 'M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z',
+  car: 'M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11m-14 0h14m-14 0a2 2 0 0 0-2 2v4h3m13-6a2 2 0 0 1 2 2v4h-3m-12 0h12m-12 0v2H4v-2m15 0v2h2v-2M7.5 14.5h.01M16.5 14.5h.01',
+  clock: 'M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm1-10V6h-2v8h6v-2z',
+  shield: 'M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3zm-1 14-4-4 1.4-1.4L11 13.2l5.6-5.6L18 9z',
+  badge: 'M12 2l2.4 1.8 3-.2.9 2.9 2.5 1.6-1.2 2.8 1.2 2.8-2.5 1.6-.9 2.9-3-.2L12 20l-2.4-1.8-3 .2-.9-2.9L3.2 14l1.2-2.9L3.2 8.3l2.5-1.6.9-2.9 3 .2L12 2zm-1.2 12.7 5-5-1.4-1.4-3.6 3.6-1.8-1.8-1.4 1.4 3.2 3.2z',
+  headset: 'M12 3a8 8 0 0 0-8 8v5a3 3 0 0 0 3 3h1a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H6v-1a6 6 0 0 1 12 0v1h-2a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h1a3 3 0 0 0 1.7-.5 3 3 0 0 1-2.7 1.7h-2.3a1.5 1.5 0 1 0 0 1.5H16a4.5 4.5 0 0 0 4.5-4.5V11a8 8 0 0 0-8-8z',
+  user: 'M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.7-8 6v2h16v-2c0-3.3-3.6-6-8-6z',
+  users: 'M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm7 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20v-1.5C2 15.6 5.1 14 9 14s7 1.6 7 4.5V20H2zm16 0v-1.5c0-1.6-.6-2.9-1.6-3.8 3 .3 5.6 1.8 5.6 4.3V20h-4z',
+  route: 'M6 3a3 3 0 0 0-1 5.8V11a3 3 0 0 0 3 3h8a1 1 0 0 1 1 1v.2A3 3 0 1 0 19 15v-.2a3 3 0 0 0-3-3H8a1 1 0 0 1-1-1V8.8A3 3 0 0 0 6 3zm0 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm12 12a1 1 0 1 1 0 2 1 1 0 0 1 0-2z',
+  map: 'M15 4 9 6 3.6 4.2A1 1 0 0 0 2.3 5.2v13a1 1 0 0 0 .7.9L9 21l6-2 5.4 1.8a1 1 0 0 0 1.3-.9v-13a1 1 0 0 0-.7-.9L15 4zm-6 3.4 4 1.3v9.9l-4-1.3V7.4z',
+  briefcase: 'M9 4a2 2 0 0 0-2 2v1H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3V6a2 2 0 0 0-2-2H9zm0 2h6v1H9V6z',
+  luggage: 'M9 2a2 2 0 0 0-2 2v2H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h1v1h2v-1h6v1h2v-1h1a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-1V4a2 2 0 0 0-2-2H9zm0 2h6v2H9V4z',
+  lock: 'M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 1 1 6 0v3H9z',
+  file: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z',
+  search: 'M10 2a8 8 0 1 0 4.9 14.3l5 5 1.4-1.4-5-5A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z',
+  alert: 'M12 2 1 21h22L12 2zm1 6v7h-2V8h2zm0 9v2h-2v-2h2z',
+  tool: 'M21.7 5.3a1 1 0 0 0-1.6-.3l-2.6 2.6-2.1-2.1L18 2.9a1 1 0 0 0-.3-1.6A6 6 0 0 0 9.6 9L2.3 16.3a2.4 2.4 0 1 0 3.4 3.4L13 12.4a6 6 0 0 0 8.7-7.1z',
+  sparkle: 'M12 2l1.9 5.6L19.5 9l-5.6 1.9L12 16.5l-1.9-5.6L4.5 9l5.6-1.4L12 2zm6.5 11 .9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9.9-2.6z',
+  baby: 'M12 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm-7 9a1 1 0 0 1 1-1h3.2a5 5 0 0 0 5.6 0H18a1 1 0 0 1 1 1v2a7 7 0 0 1-14 0v-2zm3.5 8.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm4.5 0a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z',
+  leaf: 'M20 3c-9 0-14 4-14 10a7 7 0 0 0 1.2 4L4 20.2 5.4 21.6l3.2-3.2A7 7 0 0 0 12 19c6 0 8-5 8-16zM9.5 15.5c1-3.3 3.3-5.8 6.5-7-1.3 3.6-3.5 6-6.5 7z',
+  phone: 'M6.6 2h3l1.8 4.5-2.2 1.6a12 12 0 0 0 5.7 5.7l1.6-2.2L21 13.4v3A2.6 2.6 0 0 1 18.4 19 16.4 16.4 0 0 1 5 5.6 2.6 2.6 0 0 1 6.6 2z',
+  mail: 'M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 8L4.4 7h15.2L12 13z',
+  pin: 'M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z',
+  check: 'M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z',
+  chevronDown: 'M12 15.5 5.5 9 7 7.6l5 5 5-5L18.5 9z',
+  chevronRight: 'M9 6.4 10.4 5l7 7-7 7L9 17.6 14.6 12z',
+  chevronLeft: 'M15 17.6 13.6 19l-7-7 7-7L15 6.4 9.4 12z',
+  close: 'M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7l1.4-1.4 6.3 6.3 6.3-6.3z',
+  plus: 'M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z',
+  minus: 'M5 11h14v2H5z',
+  star: 'M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z',
+  quote: 'M7.5 6C5 6 3 8 3 10.5S5 15 7.5 15c.3 0 .6 0 .9-.1-.6 1.7-2 2.9-3.9 3.3l.5 1.8c3.7-.8 6.3-3.8 6.3-8.1V10.5C11.3 8 9.5 6 7.5 6zm10 0C15 6 13 8 13 10.5S15 15 17.5 15c.3 0 .6 0 .9-.1-.6 1.7-2 2.9-3.9 3.3l.5 1.8c3.7-.8 6.3-3.8 6.3-8.1V10.5C21.3 8 19.5 6 17.5 6z',
+  image: 'M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 11l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z',
+  calendar: 'M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zM5 9h14v11H5V9z',
+  arrowRight: 'M13.2 5 12 6.4l4.6 4.6H4v2h12.6L12 17.6 13.2 19l7-7z',
+  arrowLeft: 'M10.8 5 12 6.4 7.4 11H20v2H7.4l4.6 4.6L10.8 19l-7-7z',
+  external: 'M14 3v2h3.6l-8.3 8.3 1.4 1.4L19 6.4V10h2V3h-7zM5 5h5V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5h-2v5H5V5z',
+  menu: 'M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z',
+  logout: 'M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5V3zm5.6 3.6L14.2 8l3 3H8v2h9.2l-3 3 1.4 1.4L21 12l-5.4-5.4z',
+  dashboard: 'M3 3h8v8H3V3zm10 0h8v5h-8V3zM3 13h8v8H3v-8zm10 3h8v5h-8v-5z',
+  settings:
+    'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm9.4 4a7.4 7.4 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-2-1.2L16.5 3h-4l-.4 2.6c-.7.3-1.4.7-2 1.2l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1c.6.5 1.3.9 2 1.2l.4 2.6h4l.4-2.6c.7-.3 1.4-.7 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z',
+  edit: 'M3 17.2V21h3.8L18 9.8 14.2 6 3 17.2zM20.7 7.1a1 1 0 0 0 0-1.4l-2.4-2.4a1 1 0 0 0-1.4 0l-1.8 1.8L18.9 8.9l1.8-1.8z',
+  trash: 'M6 7h12v13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7zm3-4h6l1 2h4v2H4V5h4l1-2z',
+  copy: 'M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z',
+  eye: 'M12 5C6.5 5 2.2 9.1 1 12c1.2 2.9 5.5 7 11 7s9.8-4.1 11-7c-1.2-2.9-5.5-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z',
+  upload: 'M12 3 6.4 8.6 7.8 10 11 6.8V16h2V6.8L16.2 10l1.4-1.4L12 3zM4 18h16v2H4z',
+  download: 'M12 17 6.4 11.4 7.8 10 11 13.2V4h2v9.2L16.2 10l1.4 1.4L12 17zM4 19h16v2H4z',
+  refresh: 'M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z',
+  filter: 'M3 5h18v2l-7 7v6l-4-2v-4L3 7V5z',
+  globe: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 9h-3a15 15 0 0 0-1.2-5.3A8 8 0 0 1 18.9 11zM12 4.2c.8 1.1 1.6 3.3 1.8 6.8h-3.6c.2-3.5 1-5.7 1.8-6.8zM5.1 11a8 8 0 0 1 4.2-5.3A15 15 0 0 0 8.1 11h-3zm0 2h3a15 15 0 0 0 1.2 5.3A8 8 0 0 1 5.1 13zM12 19.8c-.8-1.1-1.6-3.3-1.8-6.8h3.6c-.2 3.5-1 5.7-1.8 6.8zm2.7-1.5a15 15 0 0 0 1.2-5.3h3a8 8 0 0 1-4.2 5.3z',
+  wifi: 'M12 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0-5a6 6 0 0 0-4.2 1.8l1.4 1.4a4 4 0 0 1 5.6 0l1.4-1.4A6 6 0 0 0 12 13zm0-5a11 11 0 0 0-7.8 3.2l1.4 1.4a9 9 0 0 1 12.8 0l1.4-1.4A11 11 0 0 0 12 8z',
+  water: 'M12 2s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z',
+  seat: 'M7 4a2 2 0 0 1 2 2v6h6a2 2 0 0 1 2 2v6h-2v-5H8a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2zm11 12h2v4h-2v-4z',
+};
+
+/** These paths are drawn as outlines rather than filled shapes. */
+const STROKE_ICONS = new Set(['car']);
+
+const Icon = ({ name, size = 20, className = '', title, ...rest }) => {
+  const path = PATHS[name];
+  if (!path) return null;
+  const strokeStyle = STROKE_ICONS.has(name);
+
+  return (
+    <svg
+      className={`icon icon--${name} ${className}`.trim()}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill={strokeStyle ? 'none' : 'currentColor'}
+      stroke={strokeStyle ? 'currentColor' : undefined}
+      strokeWidth={strokeStyle ? 1.7 : undefined}
+      strokeLinecap={strokeStyle ? 'round' : undefined}
+      strokeLinejoin={strokeStyle ? 'round' : undefined}
+      role={title ? 'img' : 'presentation'}
+      aria-hidden={title ? undefined : 'true'}
+      aria-label={title}
+      focusable="false"
+      {...rest}
+    >
+      {title ? <title>{title}</title> : null}
+      <path d={path} />
+    </svg>
+  );
+};
+
+export const hasIcon = (name) => Boolean(PATHS[name]);
+export const iconNames = Object.keys(PATHS);
+export default Icon;

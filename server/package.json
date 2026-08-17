@@ -1,0 +1,35 @@
+{
+  "name": "server",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Node.js + Express API layer. Owns all Firebase Admin SDK access.",
+  "type": "module",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "nodemon --watch src --ext js,json src/index.js",
+    "start": "node src/index.js",
+    "seed": "node src/scripts/seed.js",
+    "set-admin": "node src/scripts/setAdmin.js",
+    "test": "node --test src/__tests__"
+  },
+  "dependencies": {
+    "compression": "^1.7.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "firebase-admin": "^13.0.2",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1",
+    "nodemailer": "^6.9.16",
+    "sanitize-html": "^2.14.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

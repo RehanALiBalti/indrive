@@ -1,0 +1,46 @@
+rules_version = '2';
+
+// -----------------------------------------------------------------------------
+// Firestore security rules
+//
+// Architecture note:
+// This application performs ALL Firestore reads/writes through the Node.js API
+// using the Firebase Admin SDK. The Admin SDK bypasses these rules, so these
+// rules exist to lock down the *client* SDK surface completely.
+//
+// The browser only ever uses Firebase for Authentication (sign-in, password
+// reset, email verification). It never talks to Firestore directly.
+//
+// Therefore: default deny everything, with a single narrow read allowance so a
+// signed-in user can read their own profile document if a future phase needs
+// realtime profile data. Nothing is client-writable.
+// -----------------------------------------------------------------------------
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function hasRole(role) {
+      return isSignedIn() && request.auth.token.role == role;
+    }
+
+    // A signed-in user may read (never write) their own profile document.
+    // Role changes are only possible through the admin API + custom claims.
+    match /users/{userId} {
+      allow read: if isOwner(userId) || hasRole('admin');
+      allow create, update, delete: if false;
+    }
+
+    // Everything else is served through the REST API only.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

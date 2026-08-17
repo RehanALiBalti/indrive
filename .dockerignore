@@ -1,0 +1,15 @@
+node_modules
+**/node_modules
+client/dist
+.git
+.github
+.env
+**/.env
+**/.env.*
+!**/.env.example
+*.log
+coverage
+.firebase
+tmp
+temp
+npm-debug.log*

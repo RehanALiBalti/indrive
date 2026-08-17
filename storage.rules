@@ -1,0 +1,26 @@
+rules_version = '2';
+
+// -----------------------------------------------------------------------------
+// Cloud Storage security rules
+//
+// Uploads happen exclusively through the Node.js API (Firebase Admin SDK),
+// which validates MIME type, file size and admin authorisation before writing.
+// Objects under /media are made publicly readable so they can be served to
+// anonymous website visitors; nothing is client-writable.
+// -----------------------------------------------------------------------------
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Public, read-only CMS media (vehicle photos, blog images, page images).
+    match /media/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Everything else is private to the Admin SDK.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
