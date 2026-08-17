@@ -62,8 +62,10 @@ const DashboardPage = () => {
         {(data) => (
           <>
             {!data.system?.storageEnabled ? (
-              <Alert variant="warning" title="Firebase Storage is not configured">
-                Image uploads are unavailable until a storage bucket is set in the API environment.
+              <Alert variant="warning" title="Firebase Storage is not set up">
+                Image uploads are unavailable until Storage is enabled in the Firebase Console and
+                FIREBASE_STORAGE_BUCKET is set in server/.env. Run <code>npm run check-storage --workspace server</code>{' '}
+                to verify the bucket name.
               </Alert>
             ) : null}
 

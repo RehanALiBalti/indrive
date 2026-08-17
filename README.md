@@ -75,7 +75,7 @@ Fill in at minimum:
 | `FIREBASE_PROJECT_ID` | Firebase project ID |
 | `FIREBASE_CLIENT_EMAIL` | Service account email |
 | `FIREBASE_PRIVATE_KEY` | Service account private key (quoted, `\n` escapes intact) |
-| `FIREBASE_STORAGE_BUCKET` | e.g. `your-project.appspot.com` |
+| `FIREBASE_STORAGE_BUCKET` | Storage bucket from Firebase Console → Storage (e.g. `your-project.appspot.com` or `your-project.firebasestorage.app`). **Storage must be enabled first** — see below. |
 | `SITE_URL` | Canonical public URL, no trailing slash |
 | `CORS_ORIGINS` | Comma-separated list of allowed browser origins |
 | `BOOTSTRAP_ADMIN_EMAIL` | First account registering with this email becomes an admin |
@@ -86,6 +86,33 @@ into `.env` or point `GOOGLE_APPLICATION_CREDENTIALS` at a path outside the repo
 
 Email is optional. Without SMTP settings the forms still validate and save to Firestore;
 they simply skip the notification email and log a warning.
+
+### Enable Firebase Storage (required for media uploads)
+
+The admin **Media library** uploads files through the API into Firebase Storage. If Storage
+has never been turned on for your project, uploads fail with *“The specified bucket does not exist.”*
+
+1. Open [Firebase Console](https://console.firebase.google.com/) → your project → **Storage**
+2. Click **Get started**, choose a location (match your Firestore region if possible), and finish the wizard
+3. Copy the **bucket name** from the Storage page (often `your-project-id.appspot.com` or
+   `your-project-id.firebasestorage.app`)
+4. Set it in both env files:
+   - `server/.env` → `FIREBASE_STORAGE_BUCKET=…`
+   - `client/.env` → `VITE_FIREBASE_STORAGE_BUCKET=…`
+5. Deploy the storage rules from this repo (requires the [Firebase CLI](https://firebase.google.com/docs/cli)):
+   ```bash
+   firebase login
+   firebase use your-project-id
+   firebase deploy --only storage
+   ```
+6. Verify and restart:
+   ```bash
+   npm run check-storage --workspace server
+   npm run dev
+   ```
+
+The check script prints `EXISTS` when the bucket is reachable. If both common names show
+`NOT FOUND`, Storage is still not enabled in the console.
 
 ### Configure the client
 

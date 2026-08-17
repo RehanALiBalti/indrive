@@ -56,19 +56,29 @@ export const uploadFile = async (file, { folder = 'general', alt = '', actor } =
   const blob = bucket.file(objectPath);
   const downloadToken = crypto.randomUUID();
 
-  await blob.save(buffer, {
-    resumable: false,
-    contentType: file.mimetype,
-    metadata: {
+  try {
+    await blob.save(buffer, {
+      resumable: false,
       contentType: file.mimetype,
-      cacheControl: 'public, max-age=31536000, immutable',
       metadata: {
-        firebaseStorageDownloadTokens: downloadToken,
-        uploadedBy: actor?.uid || 'system',
-        originalName: file.originalname || '',
+        contentType: file.mimetype,
+        cacheControl: 'public, max-age=31536000, immutable',
+        metadata: {
+          firebaseStorageDownloadTokens: downloadToken,
+          uploadedBy: actor?.uid || 'system',
+          originalName: file.originalname || '',
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    if (/bucket does not exist|No such bucket|404/i.test(error?.message || '')) {
+      throw ApiError.serviceUnavailable(
+        'Firebase Storage is not set up yet. In Firebase Console open Storage → Get started, ' +
+          'then set FIREBASE_STORAGE_BUCKET in server/.env to the bucket name shown there and restart the API.',
+      );
+    }
+    throw error;
+  }
 
   // Objects under media/** are publicly readable by the Storage rules, but we
   // also mark them public so the plain storage.googleapis.com URL works even

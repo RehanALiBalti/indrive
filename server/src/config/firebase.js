@@ -11,6 +11,7 @@ let app = null;
 let db = null;
 let auth = null;
 let bucket = null;
+let bucketVerified = false;
 let initError = null;
 
 const resolveCredential = () => {
@@ -95,13 +96,44 @@ export const getAuthAdmin = () => {
 export const getBucket = () => {
   if (!bucket) {
     throw ApiError.serviceUnavailable(
-      'Firebase Storage is not configured. Set FIREBASE_STORAGE_BUCKET in server/.env.',
+      'Firebase Storage is not configured. Enable Storage in the Firebase Console, set FIREBASE_STORAGE_BUCKET ' +
+        'in server/.env to the bucket name shown there, then restart the API.',
     );
   }
   return bucket;
 };
 
 export const hasStorage = () => Boolean(bucket);
+
+/**
+ * Confirms the configured bucket actually exists in Google Cloud Storage.
+ * Storage is optional at boot, but uploads fail with a cryptic GCS error when
+ * the bucket was never created (Firebase Storage not enabled in the console).
+ */
+export const verifyStorageBucket = async () => {
+  if (!bucket || bucketVerified) return Boolean(bucket);
+  bucketVerified = true;
+
+  const name = bucket.name;
+  try {
+    const [exists] = await bucket.exists();
+    if (exists) {
+      logger.info(`Firebase Storage bucket verified: ${name}`);
+      return true;
+    }
+
+    logger.error(
+      `Firebase Storage bucket "${name}" does not exist. Open Firebase Console → Storage → Get started, ` +
+        'then set FIREBASE_STORAGE_BUCKET (and VITE_FIREBASE_STORAGE_BUCKET) to the bucket name shown there.',
+    );
+    bucket = null;
+    return false;
+  } catch (error) {
+    logger.error(`Could not verify Firebase Storage bucket "${name}"`, error?.message);
+    if (/does not exist|not found|404/i.test(error?.message || '')) bucket = null;
+    return false;
+  }
+};
 export const getInitError = () => initError;
 
 export { FieldValue, Timestamp };
