@@ -81,24 +81,22 @@ app.use(
 
 const allowedOrigins = new Set(env.corsOrigins);
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      // Same-origin, curl and server-to-server requests have no Origin header.
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.has(origin)) return callback(null, true);
-      if (!env.isProduction && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
-        return callback(null, true);
-      }
-      logger.warn(`Blocked CORS request from origin: ${origin}`);
-      return callback(new Error('CORS_NOT_ALLOWED'));
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    maxAge: 86400,
-  }),
-);
+const corsOptions = {
+  origin(origin, callback) {
+    // Same-origin, curl and server-to-server requests have no Origin header.
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.has(origin)) return callback(null, true);
+    if (!env.isProduction && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
+    logger.warn(`Blocked CORS request from origin: ${origin}`);
+    return callback(new Error('CORS_NOT_ALLOWED'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  maxAge: 86400,
+};
 
 /* ------------------------------ pipeline -------------------------------- */
 
@@ -141,7 +139,7 @@ app.get(
 
 /* --------------------------------- API ---------------------------------- */
 
-app.use('/api', apiLimiter, apiRoutes);
+app.use('/api', cors(corsOptions), apiLimiter, apiRoutes);
 
 /* ---------------------------- static frontend --------------------------- */
 
