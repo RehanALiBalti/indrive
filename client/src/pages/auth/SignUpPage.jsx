@@ -40,7 +40,7 @@ const SignUpPage = () => {
       const { confirmPassword, ...payload } = values;
       try {
         await register(payload);
-        toast.success('Account created. Check your inbox to verify your email address.');
+        toast.success('Account created successfully. Welcome!');
         navigate('/account', { replace: true });
       } catch (error) {
         // Field-level errors from the API are re-thrown so useForm can map them.

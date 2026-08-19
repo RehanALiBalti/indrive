@@ -23,14 +23,25 @@ import AccountPage from './pages/auth/AccountPage.jsx';
 import ThankYouPage from './pages/ThankYouPage.jsx';
 
 const AdminApp = lazy(() => import('./admin/AdminApp.jsx'));
+const AdminLoginPage = lazy(() => import('./admin/pages/AdminLoginPage.jsx'));
 
 const App = () => (
   <Routes>
+    {/* Admin login sits outside the role guard so unauthenticated staff can reach it. */}
+    <Route
+      path="/admin/login"
+      element={
+        <Suspense fallback={<RouteLoading />}>
+          <AdminLoginPage />
+        </Suspense>
+      }
+    />
+
     {/* Admin is mounted outside the public chrome and behind a role guard. */}
     <Route
       path="/admin/*"
       element={
-        <ProtectedRoute role="editor" redirectTo="/login">
+        <ProtectedRoute role="editor" redirectTo="/admin/login">
           <Suspense fallback={<RouteLoading />}>
             <AdminApp />
           </Suspense>

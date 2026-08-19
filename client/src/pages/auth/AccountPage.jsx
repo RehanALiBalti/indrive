@@ -1,18 +1,101 @@
-import { useState } from 'react';
 import { useAuth, describeAuthError } from '../../context/AuthContext.jsx';
 import { useForm, validators } from '../../hooks/useForm.js';
 import { useToast } from '../../context/ToastContext.jsx';
+import { useApi } from '../../hooks/useApi.js';
 import Seo from '../../components/seo/Seo.jsx';
 import PageHero from '../../components/sections/PageHero.jsx';
 import Button from '../../components/ui/Button.jsx';
+import Icon from '../../components/ui/Icon.jsx';
 import { Input, PasswordInput, Checkbox } from '../../components/ui/Field.jsx';
 import { Alert, Badge } from '../../components/ui/Misc.jsx';
 
+const STATUS_LABEL = {
+  new: 'New',
+  in_progress: 'In progress',
+  resolved: 'Resolved',
+  archived: 'Archived',
+};
+
+const STATUS_VARIANT = {
+  new: 'info',
+  in_progress: 'warning',
+  resolved: 'success',
+  archived: undefined,
+};
+
+const formatDate = (val) => {
+  if (!val) return '';
+  const d = val._seconds ? new Date(val._seconds * 1000) : new Date(val);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+};
+
+const EnquiryRow = ({ item }) => (
+  <div className="enquiry-row">
+    <div className="enquiry-row__main">
+      <span className="enquiry-row__ref">{item.reference}</span>
+      <span className="enquiry-row__type">
+        <Icon name={item._icon || 'calendar'} size={14} />
+        {item._typeLabel}
+      </span>
+    </div>
+    <div className="enquiry-row__detail">
+      {item.pickup || item.subject || item.companyName || '—'}
+      {item.destination ? ` → ${item.destination}` : ''}
+    </div>
+    <div className="enquiry-row__meta">
+      <Badge variant={STATUS_VARIANT[item.status]}>{STATUS_LABEL[item.status] || item.status}</Badge>
+      <span className="enquiry-row__date">{formatDate(item.createdAt)}</span>
+    </div>
+  </div>
+);
+
+const MyEnquiries = () => {
+  const enquiries = useApi('/auth/my-enquiries', { auth: true });
+
+  if (enquiries.loading) {
+    return (
+      <div className="card">
+        <div className="card__body" style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
+          <div className="btn__spinner" style={{ width: 24, height: 24, margin: '0 auto' }} />
+        </div>
+      </div>
+    );
+  }
+
+  const items = enquiries.data || [];
+
+  if (!items.length) {
+    return (
+      <div className="card">
+        <div className="card__body stack" style={{ textAlign: 'center' }}>
+          <Icon name="calendar" size={32} style={{ opacity: 0.3, margin: '0 auto' }} />
+          <p className="card__text">You have not submitted any enquiries yet.</p>
+          <Button to="/#enquiry" variant="outline" size="sm">
+            Request a quote
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="card">
+      <div className="card__body">
+        <h2 className="card__title">My enquiries</h2>
+        <div className="enquiry-list">
+          {items.map((item) => (
+            <EnquiryRow key={item.id} item={item} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AccountPage = () => {
-  const { profile, user, isEmailVerified, updateProfile, changePassword, resendVerification, signOut } =
-    useAuth();
+  const { profile, user, updateProfile, changePassword, signOut } = useAuth();
   const toast = useToast();
-  const [verificationSent, setVerificationSent] = useState(false);
 
   const details = useForm({
     initialValues: {
@@ -69,34 +152,6 @@ const AccountPage = () => {
 
       <section className="section">
         <div className="container">
-          {!isEmailVerified ? (
-            <div style={{ marginBottom: 'var(--space-6)' }}>
-              <Alert variant="warning" title="Please verify your email address">
-                We sent a verification link to {user?.email}. Verifying your address lets us send booking
-                confirmations reliably.{' '}
-                {verificationSent ? (
-                  <strong>A new link has been sent.</strong>
-                ) : (
-                  <button
-                    type="button"
-                    className="btn btn--link"
-                    onClick={async () => {
-                      try {
-                        await resendVerification();
-                        setVerificationSent(true);
-                        toast.success('Verification email sent.');
-                      } catch (error) {
-                        toast.error(describeAuthError(error));
-                      }
-                    }}
-                  >
-                    Send it again
-                  </button>
-                )}
-              </Alert>
-            </div>
-          ) : null}
-
           <div className="grid grid--2">
             <form className="card" onSubmit={details.handleSubmit} noValidate>
               <div className="card__body stack">
@@ -167,6 +222,10 @@ const AccountPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div style={{ marginTop: 'var(--space-8)' }}>
+            <MyEnquiries />
           </div>
         </div>
       </section>

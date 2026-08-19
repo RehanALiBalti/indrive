@@ -95,7 +95,7 @@ router.post(
       email,
       password,
       displayName,
-      emailVerified: false,
+      emailVerified: true,
       disabled: false,
     });
 
@@ -114,37 +114,13 @@ router.post(
         phone: phone || '',
         role: ROLES.USER,
         status: 'active',
-        emailVerified: false,
+        emailVerified: true,
         marketingOptIn: Boolean(marketingOptIn),
         provider: 'password',
         createdAt: FieldValue.serverTimestamp(),
         updatedAt: FieldValue.serverTimestamp(),
         lastLoginAt: null,
       });
-
-    let verificationEmailSent = false;
-    if (isMailConfigured()) {
-      try {
-        const link = await auth.generateEmailVerificationLink(email, {
-          url: `${env.siteUrl}/login`,
-        });
-        const result = await sendMail({
-          to: email,
-          subject: `Confirm your email address — ${settings.brandName}`,
-          html: actionEmail({
-            brand: settings.brandName,
-            heading: 'Confirm your email address',
-            intro: `Hi ${firstName}, welcome to ${settings.brandName}. Please confirm your email address to finish setting up your account.`,
-            buttonLabel: 'Confirm email address',
-            link: toAppActionUrl(link, '/verify-email'),
-            footer: 'This link expires in 1 hour. If you did not create an account you can ignore this email.',
-          }),
-        });
-        verificationEmailSent = result.sent;
-      } catch (error) {
-        logger.warn('Could not send verification email', error?.message);
-      }
-    }
 
     logger.info('User registered', { uid: created.uid, email });
 
@@ -154,10 +130,8 @@ router.post(
         uid: created.uid,
         email,
         displayName,
-        verificationEmailSent,
-        // When SMTP is not configured the client sends the verification email
-        // through the Firebase Web SDK instead.
-        clientShouldSendVerification: !verificationEmailSent,
+        verificationEmailSent: false,
+        clientShouldSendVerification: false,
       },
       { status: 201 },
     );
@@ -313,6 +287,53 @@ router.post(
       emailSent,
       clientShouldSendVerification: !emailSent,
     });
+  }),
+);
+
+/* -------------------------------------------------------------------------- */
+/* My enquiries                                                               */
+/* -------------------------------------------------------------------------- */
+
+router.get(
+  '/my-enquiries',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const uid = req.user.uid;
+    const db = getDb();
+
+    const collections = [
+      { col: COLLECTIONS.BOOKING_ENQUIRIES, typeLabel: 'Booking enquiry', icon: 'calendar' },
+      { col: COLLECTIONS.CONTACT_SUBMISSIONS, typeLabel: 'Contact', icon: 'mail' },
+      { col: COLLECTIONS.CORPORATE_ENQUIRIES, typeLabel: 'Corporate enquiry', icon: 'briefcase' },
+      { col: COLLECTIONS.SUPPORT_REQUESTS, typeLabel: 'Support request', icon: 'help-circle' },
+    ];
+
+    const results = await Promise.all(
+      collections.map(async ({ col, typeLabel, icon }) => {
+        const snap = await db
+          .collection(col)
+          .where('meta.submittedByUid', '==', uid)
+          .orderBy('createdAt', 'desc')
+          .limit(50)
+          .get();
+        return snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          _typeLabel: typeLabel,
+          _icon: icon,
+        }));
+      }),
+    );
+
+    const all = results
+      .flat()
+      .sort((a, b) => {
+        const ta = a.createdAt?._seconds || 0;
+        const tb = b.createdAt?._seconds || 0;
+        return tb - ta;
+      });
+
+    return sendSuccess(res, all);
   }),
 );
 

@@ -886,3 +886,104 @@ a.stat-card:hover {
     justify-content: center;
   }
 }
+
+/* ----------------------------- Admin login page --------------------------- */
+
+.admin-login {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201, 164, 76, 0.1), transparent 60%),
+    linear-gradient(180deg, var(--ink-900) 0%, #0a0f1a 100%);
+}
+
+.admin-login__card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.2),
+    0 20px 60px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(16px);
+}
+
+.admin-login__header {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.admin-login__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--gold-500), var(--gold-600));
+  color: var(--ink-900);
+  margin-bottom: var(--space-4);
+  box-shadow: 0 0 0 6px rgba(201, 164, 76, 0.12);
+}
+
+.admin-login__title {
+  font-size: var(--text-2xl);
+  color: var(--white);
+  margin: 0;
+}
+
+.admin-login__lead {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.admin-login__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin-login .field__label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.admin-login .input {
+  background: rgba(11, 18, 32, 0.6);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+}
+
+.admin-login .input:focus {
+  border-color: var(--gold-500);
+  box-shadow: 0 0 0 3px rgba(201, 164, 76, 0.2);
+}
+
+.admin-login .input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.admin-login__footer {
+  margin-top: var(--space-5);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.admin-login__footer a {
+  color: var(--gold-400);
+  text-decoration: none;
+}
+
+.admin-login__footer a:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
+
+.admin-login__sep {
+  margin-inline: var(--space-2);
+  opacity: 0.4;
+}
