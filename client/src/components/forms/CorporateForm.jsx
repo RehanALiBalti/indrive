@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../lib/api.js';
+import { apiRequest } from '../../lib/api.js';
 import { useForm, validators } from '../../hooks/useForm.js';
 import { useToast } from '../../context/ToastContext.jsx';
 import Button from '../ui/Button.jsx';
@@ -63,12 +63,16 @@ const CorporateForm = () => {
       consent: [validators.required('Please accept the privacy policy to continue.')],
     },
     onSubmit: async (values) => {
-      const result = await api.post('/corporate-enquiries', {
-        ...values,
-        sourcePath: window.location.pathname,
+      const result = await apiRequest('/corporate-enquiries', {
+        method: 'POST',
+        body: {
+          ...values,
+          sourcePath: window.location.pathname,
+        },
+        auth: 'optional',
       });
-      toast.success(`Enquiry ${result.reference} received. Our corporate team will be in touch.`);
-      navigate(result.thankYouPath || '/thank-you?type=corporate');
+      toast.success(`Enquiry ${result.data.reference} received. Our corporate team will be in touch.`);
+      navigate(result.data.thankYouPath || '/thank-you?type=corporate');
     },
   });
 

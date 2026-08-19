@@ -132,6 +132,7 @@ const Header = () => {
 
   const primaryCta = items.find((item) => item.highlight);
   const phone = settings.contact?.phone;
+  const isServicePage = location.pathname === '/' || /^\/(airport-transfer|city-to-city-transfer|hourly-chauffeur|airport-transfers\/.+|chauffeur-service\/.+|city-to-city\/.+)$/.test(location.pathname);
 
   return (
     <>
@@ -173,8 +174,13 @@ const Header = () => {
               </Button>
             ) : null}
 
-            <Button className="header__cta" variant="primary" size="sm" to={primaryCta?.href || '/#enquiry'}>
-              {primaryCta?.label || 'Get a Quote'}
+            <Button
+              className="header__cta"
+              variant="primary"
+              size="sm"
+              to={isServicePage ? (primaryCta?.href || '/#enquiry') : '/contact'}
+            >
+              {isServicePage ? (primaryCta?.label || 'Get a Quote') : 'Contact Us'}
             </Button>
 
             <button

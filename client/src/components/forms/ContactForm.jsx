@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../lib/api.js';
+import { apiRequest } from '../../lib/api.js';
 import { useForm, validators } from '../../hooks/useForm.js';
 import { useToast } from '../../context/ToastContext.jsx';
 import Button from '../ui/Button.jsx';
@@ -42,14 +42,18 @@ const ContactForm = () => {
       consent: [validators.required('Please accept the privacy policy to continue.')],
     },
     onSubmit: async (values) => {
-      const result = await api.post('/contact', {
-        ...values,
-        // Send the human-readable label so notification emails read naturally.
-        subject: SUBJECTS.find((item) => item.value === values.subject)?.label || values.subject,
-        sourcePath: window.location.pathname,
+      const result = await apiRequest('/contact', {
+        method: 'POST',
+        body: {
+          ...values,
+          // Send the human-readable label so notification emails read naturally.
+          subject: SUBJECTS.find((item) => item.value === values.subject)?.label || values.subject,
+          sourcePath: window.location.pathname,
+        },
+        auth: 'optional',
       });
-      toast.success(`Message ${result.reference} sent. We usually reply within a few hours.`);
-      navigate(result.thankYouPath || '/thank-you?type=contact');
+      toast.success(`Message ${result.data.reference} sent. We usually reply within a few hours.`);
+      navigate(result.data.thankYouPath || '/thank-you?type=contact');
     },
   });
 

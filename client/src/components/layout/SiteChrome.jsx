@@ -142,9 +142,13 @@ export const BackToTop = () => {
 
 /* --------------------------- Sticky mobile CTAs -------------------------- */
 
+const SERVICE_PATH_RE = /^\/(airport-transfer|city-to-city-transfer|hourly-chauffeur|airport-transfers\/.+|chauffeur-service\/.+|city-to-city\/.+)$/;
+
 export const MobileCtaBar = () => {
   const { settings } = useSite();
+  const { pathname } = useLocation();
   const phone = settings.contact?.phone;
+  const isServicePage = pathname === '/' || SERVICE_PATH_RE.test(pathname);
 
   return (
     <div className="mobile-cta-bar">
@@ -159,10 +163,17 @@ export const MobileCtaBar = () => {
           Contact
         </Link>
       )}
-      <Link to="/#enquiry">
-        <Icon name="calendar" size={16} />
-        Get a quote
-      </Link>
+      {isServicePage ? (
+        <Link to="/#enquiry">
+          <Icon name="calendar" size={16} />
+          Get a quote
+        </Link>
+      ) : (
+        <Link to="/contact">
+          <Icon name="mail" size={16} />
+          Contact us
+        </Link>
+      )}
     </div>
   );
 };

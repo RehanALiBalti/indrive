@@ -310,15 +310,20 @@ router.get(
 
     const results = await Promise.all(
       collections.map(async ({ col, typeLabel, icon }) => {
-        const snap = await db
+        // Primary match: submissions linked to the authenticated user.
+        const byUidSnap = await db
           .collection(col)
           .where('meta.submittedByUid', '==', uid)
           .orderBy('createdAt', 'desc')
           .limit(50)
           .get();
-        return snap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
+
+        const docsById = new Map();
+        for (const doc of byUidSnap.docs) docsById.set(doc.id, doc.data());
+
+        return Array.from(docsById.entries()).map(([id, data]) => ({
+          id,
+          ...data,
           _typeLabel: typeLabel,
           _icon: icon,
         }));

@@ -1,6 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi.js';
 import { useSite } from '../../context/SiteContext.jsx';
+
+const SERVICE_PATH_RE = /^\/(airport-transfer|city-to-city-transfer|hourly-chauffeur|airport-transfers\/.+|chauffeur-service\/.+|city-to-city\/.+)$/;
+const useIsServicePage = () => {
+  const { pathname } = useLocation();
+  return pathname === '/' || SERVICE_PATH_RE.test(pathname);
+};
 import Icon, { hasIcon } from '../ui/Icon.jsx';
 import Image from '../ui/Image.jsx';
 import Button from '../ui/Button.jsx';
@@ -64,7 +70,8 @@ const gridClass = (columns = 3) => `grid grid--${Math.min(Math.max(columns, 1), 
 /* -------------------------------- sections -------------------------------- */
 
 const HeroSection = ({ section, context }) => {
-  const showBooking = section.settings?.layout !== 'simple';
+  const isServicePage = useIsServicePage();
+  const showBooking = section.settings?.layout !== 'simple' && isServicePage;
 
   return (
     <section className="hero">
@@ -127,19 +134,24 @@ const HeroSection = ({ section, context }) => {
   );
 };
 
-const BookingWidgetSection = ({ section, context }) => (
-  <SectionShell section={section}>
-    <BookingWidget
-      variant="inline"
-      title={section.title ? undefined : 'Request your quote'}
-      subtitle={section.subtitle ? undefined : ''}
-      defaultTab={section.settings?.serviceType || context?.defaultServiceTab || 'airport'}
-      lockTab={section.settings?.layout === 'locked'}
-      prefill={context?.prefill}
-      seoPageSlug={context?.seoPageSlug}
-    />
-  </SectionShell>
-);
+const BookingWidgetSection = ({ section, context }) => {
+  const isServicePage = useIsServicePage();
+  if (!isServicePage) return null;
+
+  return (
+    <SectionShell section={section}>
+      <BookingWidget
+        variant="inline"
+        title={section.title ? undefined : 'Request your quote'}
+        subtitle={section.subtitle ? undefined : ''}
+        defaultTab={section.settings?.serviceType || context?.defaultServiceTab || 'airport'}
+        lockTab={section.settings?.layout === 'locked'}
+        prefill={context?.prefill}
+        seoPageSlug={context?.seoPageSlug}
+      />
+    </SectionShell>
+  );
+};
 
 const RichTextSection = ({ section }) => (
   <SectionShell section={section}>

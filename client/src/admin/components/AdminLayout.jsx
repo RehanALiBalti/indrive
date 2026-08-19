@@ -37,7 +37,7 @@ const NAV = [
     items: [
       { to: '/admin/submissions/booking', label: 'Journey enquiries', icon: 'calendar', badge: 'booking' },
       { to: '/admin/submissions/contact', label: 'Contact messages', icon: 'mail', badge: 'contact' },
-      { to: '/admin/submissions/corporate', label: 'Corporate', icon: 'briefcase', badge: 'corporate' },
+      // { to: '/admin/submissions/corporate', label: 'Corporate', icon: 'briefcase', badge: 'corporate' },
       { to: '/admin/submissions/support', label: 'Support', icon: 'tool', badge: 'support' },
       { to: '/admin/submissions/newsletter', label: 'Newsletter', icon: 'users' },
     ],

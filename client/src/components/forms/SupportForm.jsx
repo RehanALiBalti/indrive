@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../lib/api.js';
+import { apiRequest } from '../../lib/api.js';
 import { useForm, validators } from '../../hooks/useForm.js';
 import { useToast } from '../../context/ToastContext.jsx';
 import Button from '../ui/Button.jsx';
@@ -50,9 +50,13 @@ const SupportForm = () => {
       consent: [validators.required('Please accept the privacy policy to continue.')],
     },
     onSubmit: async (values) => {
-      const result = await api.post('/support', { ...values, sourcePath: window.location.pathname });
-      toast.success(`Support request ${result.reference} logged.`);
-      navigate(result.thankYouPath || '/thank-you?type=support');
+      const result = await apiRequest('/support', {
+        method: 'POST',
+        body: { ...values, sourcePath: window.location.pathname },
+        auth: 'optional',
+      });
+      toast.success(`Support request ${result.data.reference} logged.`);
+      navigate(result.data.thankYouPath || '/thank-you?type=support');
     },
   });
 

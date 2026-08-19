@@ -85,12 +85,12 @@ const DashboardPage = () => {
                 meta={`${data.submissions.contact.new} new`}
                 to="/admin/submissions/contact"
               />
-              <StatCard
+              {/* <StatCard
                 label="Corporate enquiries"
                 value={data.submissions.corporate.total}
                 meta={`${data.submissions.corporate.new} new`}
                 to="/admin/submissions/corporate"
-              />
+              /> */}
               <StatCard
                 label="Support requests"
                 value={data.submissions.support.total}

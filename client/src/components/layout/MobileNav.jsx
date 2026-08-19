@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useSite } from '../../context/SiteContext.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
 import Icon from '../ui/Icon.jsx';
 import Button from '../ui/Button.jsx';
+
+const SERVICE_PATH_RE = /^\/(airport-transfer|city-to-city-transfer|hourly-chauffeur|airport-transfers\/.+|chauffeur-service\/.+|city-to-city\/.+)$/;
 
 /**
  * Off-canvas navigation for tablet and mobile. Purpose-built for touch rather
@@ -13,6 +15,8 @@ import Button from '../ui/Button.jsx';
 const MobileNav = ({ open, onClose }) => {
   const { settings, menu } = useSite();
   const { isAuthenticated, isStaff, signOut } = useAuth();
+  const { pathname } = useLocation();
+  const isServicePage = pathname === '/' || SERVICE_PATH_RE.test(pathname);
   const [expanded, setExpanded] = useState(null);
   const panelRef = useRef(null);
 
@@ -115,9 +119,15 @@ const MobileNav = ({ open, onClose }) => {
         </nav>
 
         <div className="nav-mobile__footer">
-          <Button variant="primary" block to="/#enquiry" onClick={onClose}>
-            Get a fixed-price quote
-          </Button>
+          {isServicePage ? (
+            <Button variant="primary" block to="/#enquiry" onClick={onClose}>
+              Get a fixed-price quote
+            </Button>
+          ) : (
+            <Button variant="primary" block to="/contact" onClick={onClose}>
+              Contact us
+            </Button>
+          )}
 
           <div className="nav-mobile__contact">
             {phone ? (

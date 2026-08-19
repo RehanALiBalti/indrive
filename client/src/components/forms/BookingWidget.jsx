@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../lib/api.js';
+import { apiRequest } from '../../lib/api.js';
 import { useForm, validators } from '../../hooks/useForm.js';
 import { useSite } from '../../context/SiteContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
@@ -163,9 +163,13 @@ const BookingWidget = ({
         });
       }
 
-      const result = await api.post('/booking-enquiries', payload);
-      toast.success(`Enquiry ${result.reference} received. We will be in touch shortly.`);
-      navigate(result.thankYouPath || '/thank-you?type=enquiry');
+      const result = await apiRequest('/booking-enquiries', {
+        method: 'POST',
+        body: payload,
+        auth: 'optional',
+      });
+      toast.success(`Enquiry ${result.data.reference} received. We will be in touch shortly.`);
+      navigate(result.data.thankYouPath || '/thank-you?type=enquiry');
     },
   });
 
