@@ -40,7 +40,6 @@ export const navigationSeed = [
           { id: 'company-blog', label: 'Travel Guides', href: '/blog', description: 'Advice and insights' },
         ],
       },
-      { id: 'corporate', label: 'Corporate', href: '/corporate', children: [] },
       {
         id: 'help',
         label: 'Help',
@@ -61,7 +60,6 @@ export const navigationSeed = [
       { id: 'f-s-1', label: 'Airport Transfer', href: '/airport-transfer', children: [] },
       { id: 'f-s-2', label: 'City-to-City Transfer', href: '/city-to-city-transfer', children: [] },
       { id: 'f-s-3', label: 'Hourly Chauffeur', href: '/hourly-chauffeur', children: [] },
-      { id: 'f-s-4', label: 'Corporate Travel', href: '/corporate', children: [] },
       { id: 'f-s-5', label: 'Our Fleet', href: '/fleet', children: [] },
     ],
   },
@@ -96,7 +94,6 @@ export const navigationSeed = [
       { id: 'm-3', label: 'City-to-City', href: '/city-to-city-transfer', children: [] },
       { id: 'm-4', label: 'Hourly Chauffeur', href: '/hourly-chauffeur', children: [] },
       { id: 'm-5', label: 'Fleet', href: '/fleet', children: [] },
-      { id: 'm-6', label: 'Corporate', href: '/corporate', children: [] },
       { id: 'm-7', label: 'About Us', href: '/about-us', children: [] },
       { id: 'm-8', label: 'How It Works', href: '/how-it-works', children: [] },
       { id: 'm-9', label: 'Travel Guides', href: '/blog', children: [] },

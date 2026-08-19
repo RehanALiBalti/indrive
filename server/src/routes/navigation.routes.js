@@ -16,6 +16,19 @@ export const MENU_KEYS = ['header', 'footer-services', 'footer-company', 'footer
 
 const keyParam = z.object({ key: z.enum(MENU_KEYS) });
 
+// Temporarily hide links without requiring a database re-seed.
+// (User request: hide the Corporate menu/page link for now.)
+const stripHiddenCorporateLinks = (items = []) => {
+  const hiddenHrefs = new Set(['/corporate']);
+
+  return items
+    .filter((item) => item && !hiddenHrefs.has(item.href))
+    .map((item) => ({
+      ...item,
+      children: stripHiddenCorporateLinks(item.children || []),
+    }));
+};
+
 const withIds = (items = []) =>
   items.map((item, index) => ({
     ...item,
@@ -31,16 +44,20 @@ export const publicRouter = Router();
 publicRouter.get(
   '/',
   asyncHandler(async (_req, res) => {
-    const menus = await withCache('public:navigation:all', env.cache.publicTtlSeconds, async () => {
-      const docs = await repo.fetchAll();
-      const map = {};
-      for (const key of MENU_KEYS) {
-        const found = docs.find((doc) => doc.id === key);
-        map[key] = { key, label: found?.label || key, items: found?.items || [] };
-      }
-      return map;
+    const docs = await withCache('public:navigation:all:docs', env.cache.publicTtlSeconds, async () => {
+      return repo.fetchAll();
     });
-    return sendSuccess(res, menus);
+
+    const map = {};
+    for (const key of MENU_KEYS) {
+      const found = docs.find((doc) => doc.id === key);
+      map[key] = {
+        key,
+        label: found?.label || key,
+        items: stripHiddenCorporateLinks(found?.items || []),
+      };
+    }
+    return sendSuccess(res, map);
   }),
 );
 
@@ -48,15 +65,17 @@ publicRouter.get(
   '/:key',
   validate({ params: keyParam }),
   asyncHandler(async (req, res) => {
-    const menu = await withCache(
-      `public:navigation:${req.params.key}`,
+    const found = await withCache(
+      `public:navigation:${req.params.key}:doc`,
       env.cache.publicTtlSeconds,
-      async () => {
-        const found = await repo.getById(req.params.key);
-        return { key: req.params.key, label: found?.label || req.params.key, items: found?.items || [] };
-      },
+      async () => repo.getById(req.params.key),
     );
-    return sendSuccess(res, menu);
+
+    return sendSuccess(res, {
+      key: req.params.key,
+      label: found?.label || req.params.key,
+      items: stripHiddenCorporateLinks(found?.items || []),
+    });
   }),
 );
 
