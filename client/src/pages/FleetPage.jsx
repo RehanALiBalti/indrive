@@ -93,7 +93,7 @@ const FleetPage = () => {
 
       <section className="section">
         <div className="container">
-          <div className="field-row" role="search" aria-label="Filter the fleet">
+          <div className="field-row field-row--3" role="search" aria-label="Filter the fleet">
             <Input
               label="Search vehicles"
               placeholder="Search by name, class or model"

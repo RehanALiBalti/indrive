@@ -61,6 +61,61 @@ export const ScrollToTop = () => {
   return null;
 };
 
+const REVEAL_SELECTOR = [
+  '.card',
+  '.cta-band',
+  '.feature',
+  '.spec',
+  '.booking',
+  '.gallery-main',
+  '.section__head',
+  '.vehicle-detail',
+  '.accordion',
+  '.image-text',
+  '.stat-grid',
+  '.media-grid',
+].join(', ');
+
+/** Adds a short rise-in animation as public-site blocks enter the viewport. */
+export const MotionReveal = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    let observer;
+    let cancelled = false;
+    const frame = window.requestAnimationFrame(() => {
+      if (cancelled) return;
+      const nodes = [...document.querySelectorAll(REVEAL_SELECTOR)].filter(
+        (node) => !node.closest('.admin-shell, .admin-app, [data-no-reveal]'),
+      );
+      nodes.forEach((node) => node.classList.add('js-reveal'));
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add('is-in');
+            observer.unobserve(entry.target);
+          }
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+      );
+
+      nodes.forEach((node) => observer.observe(node));
+    });
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+      observer?.disconnect();
+    };
+  }, [pathname]);
+
+  return null;
+};
+
 /* ------------------------------ Back to top ------------------------------ */
 
 export const BackToTop = () => {

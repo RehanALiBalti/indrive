@@ -14,6 +14,7 @@
     "seed": "node src/scripts/seed.js",
     "set-admin": "node src/scripts/setAdmin.js",
     "check-storage": "node scripts/check-storage-bucket.mjs",
+    "seed-fleet-images": "node scripts/seed-fleet-images.mjs",
     "test": "node --test src/__tests__"
   },
   "dependencies": {

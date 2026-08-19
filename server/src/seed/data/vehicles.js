@@ -1,8 +1,12 @@
 /**
- * Seed fleet. Images are intentionally empty: the admin uploads real photography
- * through the CMS media library, and the UI renders a branded placeholder until
- * then. Nothing about the fleet is hard-coded in React.
+ * Seed fleet. Dummy photography lives in client/public/fleet so cards and
+ * vehicle pages have images before real photography is uploaded in the CMS.
  */
+const photo = (slug, n, alt) => ({
+  url: `/fleet/${slug}-${n}.svg`,
+  alt,
+  path: `fleet/${slug}-${n}.svg`,
+});
 export const vehiclesSeed = [
   {
     id: 'executive-saloon',
@@ -15,7 +19,10 @@ export const vehiclesSeed = [
     description:
       '<p>The executive saloon is the backbone of any chauffeur fleet. Leather seating, climate control and a genuinely quiet cabin make it equally suited to an early airport run or a full day of meetings.</p>' +
       '<p>Boot space comfortably takes two large suitcases plus hand luggage. If you are travelling with more, the luxury MPV is the better choice.</p>',
-    images: [],
+    images: [
+      photo('executive-saloon', 1, 'Executive saloon exterior'),
+      photo('executive-saloon', 2, 'Executive saloon cabin'),
+    ],
     passengers: 3,
     luggage: 2,
     handLuggage: 2,
@@ -29,7 +36,7 @@ export const vehiclesSeed = [
     ],
     exampleModels: ['Mercedes-Benz E-Class', 'BMW 5 Series', 'Audi A6'],
     startingPriceLabel: 'From £65',
-    cta: { label: 'Request this vehicle', href: '/#enquiry', variant: 'primary', enabled: true },
+    cta: { label: 'Request this vehicle', href: '#enquiry', variant: 'primary', enabled: true },
     isActive: true,
     sortOrder: 1,
     seo: {
@@ -50,7 +57,10 @@ export const vehiclesSeed = [
     description:
       '<p>Our first-class saloons are reserved for occasions where comfort matters most: board-level travel, VIP guests and long motorway journeys.</p>' +
       '<p>Expect extended rear legroom, individually reclining rear seats, four-zone climate control and near-silent running at motorway speeds.</p>',
-    images: [],
+    images: [
+      photo('luxury-saloon', 1, 'Luxury saloon exterior'),
+      photo('luxury-saloon', 2, 'Luxury saloon interior'),
+    ],
     passengers: 3,
     luggage: 2,
     handLuggage: 2,
@@ -64,7 +74,7 @@ export const vehiclesSeed = [
     ],
     exampleModels: ['Mercedes-Benz S-Class', 'BMW 7 Series', 'Audi A8'],
     startingPriceLabel: 'From £110',
-    cta: { label: 'Request this vehicle', href: '/#enquiry', variant: 'primary', enabled: true },
+    cta: { label: 'Request this vehicle', href: '#enquiry', variant: 'primary', enabled: true },
     isActive: true,
     sortOrder: 2,
     seo: {
@@ -85,7 +95,10 @@ export const vehiclesSeed = [
     description:
       '<p>When a saloon is not enough, the luxury MPV carries up to seven passengers in individual seats with room for a full set of luggage.</p>' +
       '<p>Sliding doors, a low step-in height and a flat floor make it the most practical option for families, older travellers and anyone with bulky luggage such as golf clubs or ski equipment.</p>',
-    images: [],
+    images: [
+      photo('luxury-mpv', 1, 'Luxury MPV exterior'),
+      photo('luxury-mpv', 2, 'Luxury MPV cabin space'),
+    ],
     passengers: 7,
     luggage: 6,
     handLuggage: 7,
@@ -99,7 +112,7 @@ export const vehiclesSeed = [
     ],
     exampleModels: ['Mercedes-Benz V-Class', 'Volkswagen Multivan'],
     startingPriceLabel: 'From £95',
-    cta: { label: 'Request this vehicle', href: '/#enquiry', variant: 'primary', enabled: true },
+    cta: { label: 'Request this vehicle', href: '#enquiry', variant: 'primary', enabled: true },
     isActive: true,
     sortOrder: 3,
     seo: {
@@ -120,7 +133,10 @@ export const vehiclesSeed = [
     description:
       '<p>Our electric executive vehicles deliver the same standard of comfort as the combustion fleet with zero tailpipe emissions and a notably quieter cabin.</p>' +
       '<p>Corporate clients can request electric-only allocation across their account and receive journey-level emissions reporting for ESG purposes.</p>',
-    images: [],
+    images: [
+      photo('electric-executive', 1, 'Electric executive vehicle exterior'),
+      photo('electric-executive', 2, 'Electric executive vehicle charging'),
+    ],
     passengers: 3,
     luggage: 2,
     handLuggage: 2,
@@ -134,7 +150,7 @@ export const vehiclesSeed = [
     ],
     exampleModels: ['Mercedes-Benz EQE', 'BMW i5', 'Tesla Model S'],
     startingPriceLabel: 'From £75',
-    cta: { label: 'Request this vehicle', href: '/#enquiry', variant: 'primary', enabled: true },
+    cta: { label: 'Request this vehicle', href: '#enquiry', variant: 'primary', enabled: true },
     isActive: true,
     sortOrder: 4,
     seo: {
@@ -155,7 +171,10 @@ export const vehiclesSeed = [
     description:
       '<p>For conference delegations, sports teams, wedding parties and roadshows, the executive minibus keeps everyone together in one vehicle.</p>' +
       '<p>Reclining coach seating, air conditioning, USB charging and a separate luggage compartment make longer group journeys genuinely comfortable.</p>',
-    images: [],
+    images: [
+      photo('executive-minibus', 1, 'Executive minibus exterior'),
+      photo('executive-minibus', 2, 'Executive minibus seating'),
+    ],
     passengers: 16,
     luggage: 16,
     handLuggage: 16,
@@ -169,7 +188,7 @@ export const vehiclesSeed = [
     ],
     exampleModels: ['Mercedes-Benz Sprinter Executive'],
     startingPriceLabel: 'From £180',
-    cta: { label: 'Request this vehicle', href: '/#enquiry', variant: 'primary', enabled: true },
+    cta: { label: 'Request this vehicle', href: '#enquiry', variant: 'primary', enabled: true },
     isActive: true,
     sortOrder: 5,
     seo: {

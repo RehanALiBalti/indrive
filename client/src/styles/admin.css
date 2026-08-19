@@ -235,7 +235,7 @@
 .stat-grid {
   display: grid;
   gap: var(--space-4);
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
 
 .stat-card {
@@ -861,4 +861,28 @@ a.stat-card:hover {
   font-weight: 400;
   color: var(--slate-500);
   font-size: var(--text-xs);
+}
+
+@media (max-width: 639px) {
+  .image-field {
+    flex-direction: column;
+  }
+
+  .image-field__preview {
+    width: 100%;
+    height: 140px;
+  }
+
+  .admin-page-head {
+    align-items: stretch;
+  }
+
+  .admin-page-head .admin-actions,
+  .admin-actions .btn {
+    width: 100%;
+  }
+
+  .admin-actions .btn {
+    justify-content: center;
+  }
 }

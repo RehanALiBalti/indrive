@@ -77,6 +77,14 @@
 .btn--outline:hover:not(:disabled) {
   border-color: var(--ink-800);
   background: var(--slate-50);
+  color: var(--ink-900);
+}
+
+.btn:hover:not(:disabled):not(.btn--link) {
+  transform: translateY(-2px);
+}
+.btn:active:not(:disabled):not(.btn--link) {
+  transform: translateY(0);
 }
 
 .btn--ghost {
@@ -125,6 +133,14 @@
   width: 100%;
 }
 
+@media (max-width: 479px) {
+  .btn:not(.btn--icon):not(.btn--link) {
+    white-space: normal;
+    text-align: center;
+    max-width: 100%;
+  }
+}
+
 .btn--icon {
   padding: 0;
   width: 40px;
@@ -147,20 +163,36 @@
   }
 }
 
-/* On dark section backgrounds, outline buttons invert. */
-.section--dark .btn--outline {
+/* On dark surfaces, outline/ghost buttons must stay readable. */
+.section--dark .btn--outline,
+.cta-band .btn--outline,
+.hero .btn--outline,
+.page-hero .btn--outline,
+.footer .btn--outline {
   color: var(--white);
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.55);
+  background: transparent;
 }
-.section--dark .btn--outline:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+.section--dark .btn--outline:hover:not(:disabled),
+.cta-band .btn--outline:hover:not(:disabled),
+.hero .btn--outline:hover:not(:disabled),
+.page-hero .btn--outline:hover:not(:disabled),
+.footer .btn--outline:hover:not(:disabled) {
+  color: var(--ink-900);
+  background: var(--white);
   border-color: var(--white);
 }
-.section--dark .btn--ghost {
+.section--dark .btn--ghost,
+.cta-band .btn--ghost,
+.hero .btn--ghost,
+.page-hero .btn--ghost {
   color: var(--white);
 }
-.section--dark .btn--ghost:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+.section--dark .btn--ghost:hover:not(:disabled),
+.cta-band .btn--ghost:hover:not(:disabled),
+.hero .btn--ghost:hover:not(:disabled),
+.page-hero .btn--ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
 }
 .section--dark .btn--primary {
   background: var(--gold-500);
@@ -344,11 +376,14 @@
     grid-template-columns: 1fr 1fr;
   }
   .field-row--3 {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (min-width: 900px) {
+  .field-row--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
   .field-row--4 {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -422,6 +457,17 @@
   flex-wrap: wrap;
 }
 
+@media (max-width: 899px) {
+  .vehicle-card .card__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .vehicle-card .card__footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .card__title {
   font-size: var(--text-xl);
   margin: 0;
@@ -442,12 +488,13 @@
   color: var(--gold-600);
 }
 
-/* Branded placeholder shown until the CMS has real photography. */
+/* Branded placeholder shown until the CMS has real photography.
+   Default is in-flow so it cannot escape and cover the page. Inside a
+   positioned frame (e.g. .card__media) it fills that frame instead. */
 .media-placeholder {
-  position: absolute;
-  inset: 0;
   display: grid;
   place-items: center;
+  width: 100%;
   background:
     radial-gradient(120% 120% at 20% 0%, rgba(201, 164, 76, 0.22), transparent 55%),
     linear-gradient(140deg, var(--ink-700), var(--ink-900));
@@ -455,6 +502,14 @@
   gap: var(--space-2);
   text-align: center;
   padding: var(--space-4);
+  border-radius: inherit;
+}
+
+.card__media > .media-placeholder {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
 }
 
 .media-placeholder svg {
@@ -679,8 +734,14 @@
     max-height: 92dvh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
+  .modal__header,
+  .modal__body,
+  .modal__footer {
+    padding-inline: var(--space-4);
+  }
   .modal__footer {
     flex-direction: column-reverse;
+    padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
   }
   .modal__footer .btn {
     width: 100%;
@@ -699,6 +760,15 @@
   gap: var(--space-2);
   max-width: min(400px, calc(100vw - 2rem));
   pointer-events: none;
+}
+
+@media (max-width: 1023px) {
+  .toast-region {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    left: var(--space-3);
+    right: var(--space-3);
+    max-width: none;
+  }
 }
 
 .toast {

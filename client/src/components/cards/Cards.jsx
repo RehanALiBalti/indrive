@@ -43,33 +43,56 @@ export const ServiceCard = ({ service }) => {
   );
 };
 
+const DEFAULT_ENQUIRY_HREFS = new Set(['', '#enquiry', '/#enquiry']);
+
+/** Quote CTA for a vehicle: custom CMS link, otherwise the vehicle enquiry form. */
+export const vehicleQuoteHref = (vehicle, { onDetailPage = false } = {}) => {
+  const href = vehicle?.cta?.href?.trim() || '';
+  if (href && !DEFAULT_ENQUIRY_HREFS.has(href)) return href;
+  return onDetailPage ? '#enquiry' : `/fleet/${vehicle.slug}#enquiry`;
+};
+
+export const vehicleCtaLabel = (vehicle) =>
+  vehicle?.cta?.enabled === false ? '' : vehicle?.cta?.label || 'Request this vehicle';
+
 /* ------------------------------ Vehicle card ------------------------------ */
 
 export const VehicleCard = ({ vehicle, showCta = true }) => {
   const image = vehicle.images?.[0];
   const href = `/fleet/${vehicle.slug}`;
+  const quoteHref = vehicleQuoteHref(vehicle);
+  const quoteLabel = vehicleCtaLabel(vehicle) || 'Get a quote';
 
   return (
-    <article className="card card--interactive">
+    <article className="card card--interactive vehicle-card">
       <Link to={href} className="card__media" tabIndex={-1} aria-hidden="true">
-        <Image src={image?.url} alt={image?.alt || vehicle.name} ratio="16/10" />
+        <Image
+          src={image?.url}
+          alt={image?.alt || vehicle.name}
+          ratio="16/10"
+          placeholderLabel="Vehicle photo coming soon"
+        />
+        {vehicle.category ? <span className="vehicle-card__class">{vehicle.category}</span> : null}
       </Link>
       <div className="card__body">
-        {vehicle.category ? <span className="card__eyebrow">{vehicle.category}</span> : null}
         <h3 className="card__title">
           <Link to={href}>{vehicle.name}</Link>
         </h3>
         {vehicle.shortDescription ? <p className="card__text">{vehicle.shortDescription}</p> : null}
 
         <div className="vehicle-card__specs">
-          <span className="vehicle-card__spec">
-            <Icon name="users" size={16} />
-            {vehicle.passengers} passengers
-          </span>
-          <span className="vehicle-card__spec">
-            <Icon name="luggage" size={16} />
-            {vehicle.luggage} bags
-          </span>
+          {vehicle.passengers != null ? (
+            <span className="vehicle-card__spec">
+              <Icon name="users" size={16} />
+              Up to {vehicle.passengers} passengers
+            </span>
+          ) : null}
+          {vehicle.luggage != null ? (
+            <span className="vehicle-card__spec">
+              <Icon name="luggage" size={16} />
+              {vehicle.luggage} large bags
+            </span>
+          ) : null}
         </div>
 
         {vehicle.features?.length ? (
@@ -86,8 +109,8 @@ export const VehicleCard = ({ vehicle, showCta = true }) => {
           <Button variant="link" to={href} iconRight="arrowRight">
             View details
           </Button>
-          <Button variant="outline" size="sm" to={`/#enquiry`}>
-            Get a quote
+          <Button variant="outline" size="sm" to={quoteHref}>
+            {quoteLabel}
           </Button>
         </div>
       ) : null}

@@ -170,7 +170,7 @@ const ServiceView = ({ service }) => {
             {(items) => (
               <div className="grid grid--4">
                 {items.map((vehicle) => (
-                  <VehicleCard key={vehicle.id} vehicle={vehicle} showCta={false} />
+                  <VehicleCard key={vehicle.id} vehicle={vehicle} />
                 ))}
               </div>
             )}

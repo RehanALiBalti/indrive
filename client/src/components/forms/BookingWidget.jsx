@@ -55,8 +55,8 @@ const BookingWidget = ({
   const { data: vehicles } = useApi('/vehicles', { params: { limit: 20 } });
 
   const booking = settings.booking || {};
-  const maxPassengers = booking.maxPassengers || 8;
-  const maxLuggage = booking.maxLuggage || 10;
+  const maxPassengers = Math.max(booking.maxPassengers || 8, Number(prefill.passengers) || 0, 1);
+  const maxLuggage = Math.max(booking.maxLuggage || 10, Number(prefill.luggage) || 0);
 
   const vehicleOptions = useMemo(
     () => [
@@ -107,10 +107,10 @@ const BookingWidget = ({
       airport: prefill.airport || '',
       date: defaultDate(),
       time: '09:00',
-      passengers: '2',
-      luggage: '2',
+      passengers: String(prefill.passengers || '2'),
+      luggage: String(prefill.luggage ?? '2'),
       hours: String(booking.hourlyMinHours || 3),
-      vehicleSlug: '',
+      vehicleSlug: prefill.vehicleSlug || '',
       flightNumber: '',
       firstName: '',
       lastName: '',

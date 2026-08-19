@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="Executive Minibus">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#121b2c"/>
+      <stop offset="100%" stop-color="#0b1220"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="20%" cy="0%" r="80%">
+      <stop offset="0%" stop-color="#c9a44c" stop-opacity="0.28"/>
+      <stop offset="55%" stop-color="#c9a44c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <text x="80" y="90" fill="#c9a44c" font-family="Georgia, serif" font-size="28" letter-spacing="6" text-transform="uppercase">Group Travel</text>
+  <text x="80" y="170" fill="#f8fafc" font-family="Georgia, serif" font-size="64" font-weight="600">Executive Minibus</text>
+  <text x="80" y="220" fill="rgba(248,250,252,0.55)" font-family="system-ui, sans-serif" font-size="22">Sample interior · replace in Admin → Fleet</text>
+  <path d="M80 460h1440M160 460V210c0-28 22-50 50-50h1100c28 0 50 22 50 50v250M220 460v70h-48v-70M1540 460v70h-48v-70M320 420a36 36 0 1 0 0.1 0M1400 420a36 36 0 1 0 0.1 0M240 230h1120M240 300h1120M240 370h1120" fill="none" stroke="#c9a44c" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

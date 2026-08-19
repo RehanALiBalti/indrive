@@ -29,7 +29,7 @@ const Image = ({
         className={`media-placeholder ${className}`.trim()}
         role="img"
         aria-label={alt || placeholderLabel}
-        style={{ ...ratioStyle, ...style }}
+        style={{ width: '100%', ...ratioStyle, ...style }}
       >
         <Icon name="image" size={40} />
         <span>{placeholderLabel}</span>

@@ -255,6 +255,8 @@ export const RESOURCES = {
       passengers: 3,
       luggage: 2,
       handLuggage: 2,
+      category: 'Business Class',
+      cta: { label: 'Request this vehicle', href: '#enquiry', variant: 'primary', enabled: true },
     },
     columns: [
       {
@@ -297,7 +299,12 @@ export const RESOURCES = {
           { name: 'shortDescription', label: 'Short description', type: 'textarea', rows: 2 },
           { name: 'description', label: 'Full description', type: 'richtext' },
           { name: 'startingPriceLabel', label: 'Price label', placeholder: 'From £65' },
-          { name: 'cta', label: 'Call to action', type: 'cta' },
+          {
+            name: 'cta',
+            label: 'Call to action',
+            type: 'cta',
+            hint: 'Shown on the vehicle card and the fleet detail page. Use #enquiry to scroll to the quote form on this page.',
+          },
         ],
       },
       {

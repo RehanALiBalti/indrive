@@ -8,6 +8,7 @@
  * The script is idempotent: running it twice without --force changes nothing.
  */
 import { getDb, FieldValue, isFirebaseReady, getInitError } from '../config/firebase.js';
+import { invalidate } from '../utils/cache.js';
 import env from '../config/env.js';
 import { COLLECTIONS, SITE_SETTINGS_DOC } from '../constants/collections.js';
 import { DEFAULT_SITE_SETTINGS } from '../constants/siteDefaults.js';
@@ -126,6 +127,8 @@ const run = async () => {
     ],
     'redirects',
   );
+
+  invalidate();
 
   console.log('\n=== Summary ===');
   console.log(`  Created : ${stats.created}`);

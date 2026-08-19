@@ -1,0 +1,89 @@
+/* ==========================================================================
+   Public-site motion. Kept out of admin so the CMS stays snappy.
+   Honours prefers-reduced-motion (see base.css).
+   ========================================================================== */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    will-change: opacity, transform;
+  }
+
+  .js-reveal.is-in {
+    animation: rise-in 0.7s var(--ease) forwards;
+  }
+
+  .hero .hero__content {
+    animation: rise-in 0.8s var(--ease) both;
+  }
+
+  .hero .hero__aside,
+  .hero .booking {
+    animation: rise-in 0.8s var(--ease) 0.12s both;
+  }
+
+  .page-hero__inner {
+    animation: fade-up 0.65s var(--ease) both;
+  }
+
+  .spec,
+  .feature {
+    transition:
+      transform var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
+  }
+
+  .spec:hover,
+  .feature:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--gold-400);
+  }
+
+  .cta-band {
+    transition: transform var(--duration-slow) var(--ease), box-shadow var(--duration-slow) var(--ease);
+  }
+
+  .gallery-main img,
+  .gallery-main .media-placeholder {
+    transition: transform var(--duration-slow) var(--ease), box-shadow var(--duration) var(--ease);
+  }
+
+  .footer a {
+    transition:
+      color var(--duration) var(--ease),
+      transform var(--duration-fast) var(--ease);
+  }
+
+  .tick-list li {
+    transition: transform var(--duration-fast) var(--ease);
+  }
+
+  .tick-list li:hover {
+    transform: translateX(4px);
+  }
+}

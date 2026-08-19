@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { apiRequest } from '../lib/api.js';
 
 /**
@@ -11,19 +11,11 @@ export const useApi = (path, { params, auth = false, enabled = true, initialData
   const [data, setData] = useState(initialData);
   const [meta, setMeta] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(Boolean(path) && enabled);
+  const [loading, setLoading] = useState(Boolean(path) && enabled && initialData == null);
   const [reloadToken, setReloadToken] = useState(0);
 
   // Serialised so callers can pass an inline object without causing a loop.
   const paramsKey = JSON.stringify(params ?? null);
-  const mounted = useRef(true);
-
-  useEffect(() => {
-    mounted.current = true;
-    return () => {
-      mounted.current = false;
-    };
-  }, []);
 
   useEffect(() => {
     if (!path || !enabled) {
@@ -32,26 +24,30 @@ export const useApi = (path, { params, auth = false, enabled = true, initialData
     }
 
     const controller = new AbortController();
-    setLoading(true);
+    let active = true;
     setError(null);
+    setLoading(true);
 
     apiRequest(path, { params: params ?? undefined, auth, signal: controller.signal })
       .then((result) => {
-        if (controller.signal.aborted || !mounted.current) return;
+        if (!active) return;
         setData(result.data);
         setMeta(result.meta);
       })
       .catch((requestError) => {
-        if (controller.signal.aborted || !mounted.current) return;
+        if (!active) return;
         if (requestError.name === 'AbortError') return;
         setError(requestError);
       })
       .finally(() => {
-        if (controller.signal.aborted || !mounted.current) return;
+        if (!active) return;
         setLoading(false);
       });
 
-    return () => controller.abort();
+    return () => {
+      active = false;
+      controller.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path, paramsKey, auth, enabled, reloadToken]);
 

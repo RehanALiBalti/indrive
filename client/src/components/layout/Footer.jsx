@@ -5,18 +5,18 @@ import { Brand } from './Header.jsx';
 import NewsletterForm from '../forms/NewsletterForm.jsx';
 
 const SOCIAL = [
-  { key: 'facebook', label: 'Facebook' },
-  { key: 'instagram', label: 'Instagram' },
-  { key: 'linkedin', label: 'LinkedIn' },
-  { key: 'x', label: 'X' },
-  { key: 'youtube', label: 'YouTube' },
-  { key: 'tiktok', label: 'TikTok' },
+  { key: 'facebook', label: 'Facebook', icon: 'facebook' },
+  { key: 'instagram', label: 'Instagram', icon: 'instagram' },
+  { key: 'linkedin', label: 'LinkedIn', icon: 'linkedin' },
+  { key: 'x', label: 'X', icon: 'x' },
+  { key: 'youtube', label: 'YouTube', icon: 'youtube' },
+  { key: 'tiktok', label: 'TikTok', icon: 'tiktok' },
 ];
 
 const FooterColumn = ({ heading, items }) => {
   if (!items.length) return null;
   return (
-    <div>
+    <nav className="footer__col" aria-label={heading}>
       <h2 className="footer__heading">{heading}</h2>
       <ul className="footer__list">
         {items.map((item) => (
@@ -31,7 +31,7 @@ const FooterColumn = ({ heading, items }) => {
           </li>
         ))}
       </ul>
-    </div>
+    </nav>
   );
 };
 
@@ -43,12 +43,19 @@ const Footer = () => {
     .join(', ');
 
   const socialLinks = SOCIAL.filter((item) => settings.social?.[item.key]);
+  const companyBits = [
+    settings.legalName,
+    settings.company?.registrationNumber ? `Registered no. ${settings.company.registrationNumber}` : '',
+    settings.company?.vatNumber ? `VAT no. ${settings.company.vatNumber}` : '',
+    settings.company?.licenceNumber ? `Licence ${settings.company.licenceNumber}` : '',
+  ].filter(Boolean);
 
   return (
     <footer className="footer">
+      <div className="footer__glow" aria-hidden="true" />
       <div className="container">
         <div className="footer__grid">
-          <div>
+          <div className="footer__brand-col">
             <Brand settings={settings} inFooter />
             {settings.footer?.about ? <p className="footer__about">{settings.footer.about}</p> : null}
 
@@ -63,10 +70,14 @@ const Footer = () => {
                     aria-label={item.label}
                     title={item.label}
                   >
-                    <Icon name="globe" size={18} />
+                    <Icon name={item.icon} size={16} />
                   </a>
                 ))}
               </div>
+            ) : null}
+
+            {settings.footer?.paymentNote ? (
+              <p className="footer__payment">{settings.footer.paymentNote}</p>
             ) : null}
           </div>
 
@@ -74,30 +85,38 @@ const Footer = () => {
           <FooterColumn heading="Company" items={menu('footer-company')} />
           <FooterColumn heading="Legal" items={menu('footer-legal')} />
 
-          <div>
+          <div className="footer__contact-col">
             <h2 className="footer__heading">Contact</h2>
             <div className="footer__list">
               {contact.phone ? (
                 <div className="footer__contact-item">
-                  <Icon name="phone" size={16} />
+                  <span className="footer__contact-icon">
+                    <Icon name="phone" size={16} />
+                  </span>
                   <a href={`tel:${contact.phone.replace(/\s/g, '')}`}>{contact.phone}</a>
                 </div>
               ) : null}
               {contact.email ? (
                 <div className="footer__contact-item">
-                  <Icon name="mail" size={16} />
+                  <span className="footer__contact-icon">
+                    <Icon name="mail" size={16} />
+                  </span>
                   <a href={`mailto:${contact.email}`}>{contact.email}</a>
                 </div>
               ) : null}
               {address ? (
                 <div className="footer__contact-item">
-                  <Icon name="pin" size={16} />
-                  <address style={{ fontStyle: 'normal' }}>{address}</address>
+                  <span className="footer__contact-icon">
+                    <Icon name="pin" size={16} />
+                  </span>
+                  <address>{address}</address>
                 </div>
               ) : null}
               {contact.openingHours ? (
                 <div className="footer__contact-item">
-                  <Icon name="clock" size={16} />
+                  <span className="footer__contact-icon">
+                    <Icon name="clock" size={16} />
+                  </span>
                   <span>{contact.openingHours}</span>
                 </div>
               ) : null}
@@ -113,10 +132,13 @@ const Footer = () => {
         </div>
 
         <div className="footer__bottom">
-          <p>
-            {settings.footer?.copyright ||
-              `© ${new Date().getFullYear()} ${settings.legalName || settings.brandName}. All rights reserved.`}
-          </p>
+          <div className="footer__bottom-copy">
+            <p>
+              {settings.footer?.copyright ||
+                `© ${new Date().getFullYear()} ${settings.legalName || settings.brandName}. All rights reserved.`}
+            </p>
+            {companyBits.length ? <p className="footer__company">{companyBits.join(' · ')}</p> : null}
+          </div>
           <ul className="footer__legal">
             {menu('footer-legal').map((item) => (
               <li key={`bottom-${item.id || item.href}`}>
@@ -126,8 +148,7 @@ const Footer = () => {
             <li>
               <button
                 type="button"
-                className="btn btn--link"
-                style={{ color: 'inherit', fontSize: 'inherit' }}
+                className="footer__cookie-btn"
                 onClick={() => window.dispatchEvent(new CustomEvent('open-cookie-preferences'))}
               >
                 Cookie preferences
@@ -135,17 +156,6 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-
-        {settings.company?.registrationNumber || settings.company?.vatNumber ? (
-          <p style={{ fontSize: 'var(--text-xs)', paddingBottom: 'var(--space-6)', opacity: 0.7 }}>
-            {settings.legalName}
-            {settings.company.registrationNumber
-              ? ` · Registered no. ${settings.company.registrationNumber}`
-              : ''}
-            {settings.company.vatNumber ? ` · VAT no. ${settings.company.vatNumber}` : ''}
-            {settings.company.licenceNumber ? ` · Licence ${settings.company.licenceNumber}` : ''}
-          </p>
-        ) : null}
       </div>
     </footer>
   );

@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from './Header.jsx';
 import Footer from './Footer.jsx';
-import { AnnouncementBar, BackToTop, MobileCtaBar, CookieConsent, Analytics, ScrollToTop } from './SiteChrome.jsx';
+import { AnnouncementBar, BackToTop, MobileCtaBar, CookieConsent, Analytics, ScrollToTop, MotionReveal } from './SiteChrome.jsx';
 import { RouteLoading } from '../ui/States.jsx';
 import { organisationSchema } from '../seo/Seo.jsx';
 import { useSite } from '../../context/SiteContext.jsx';
@@ -27,6 +27,7 @@ const SiteLayout = () => {
       </a>
 
       <ScrollToTop />
+      <MotionReveal />
       <Analytics />
       <AnnouncementBar />
       <Header />

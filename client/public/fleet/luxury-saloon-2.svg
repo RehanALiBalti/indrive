@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="Luxury Saloon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#121b2c"/>
+      <stop offset="100%" stop-color="#0b1220"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="20%" cy="0%" r="80%">
+      <stop offset="0%" stop-color="#d9bc78" stop-opacity="0.28"/>
+      <stop offset="55%" stop-color="#d9bc78" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <text x="80" y="90" fill="#d9bc78" font-family="Georgia, serif" font-size="28" letter-spacing="6" text-transform="uppercase">First Class</text>
+  <text x="80" y="170" fill="#f8fafc" font-family="Georgia, serif" font-size="64" font-weight="600">Luxury Saloon</text>
+  <text x="80" y="220" fill="rgba(248,250,252,0.55)" font-family="system-ui, sans-serif" font-size="22">Sample interior · replace in Admin → Fleet</text>
+  <path d="M80 440h1440M180 440l90-170c14-30 42-50 74-50h760c32 0 60 20 74 50l90 170M240 440v80h-48v-80M1528 440v80h-48v-80M340 396a40 40 0 1 0 0.1 0M1380 396a40 40 0 1 0 0.1 0M330 290h940" fill="none" stroke="#d9bc78" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

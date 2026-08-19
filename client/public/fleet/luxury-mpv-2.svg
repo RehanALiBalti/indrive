@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="Luxury MPV">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#121b2c"/>
+      <stop offset="100%" stop-color="#0b1220"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="20%" cy="0%" r="80%">
+      <stop offset="0%" stop-color="#c9a44c" stop-opacity="0.28"/>
+      <stop offset="55%" stop-color="#c9a44c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <text x="80" y="90" fill="#c9a44c" font-family="Georgia, serif" font-size="28" letter-spacing="6" text-transform="uppercase">Business Van</text>
+  <text x="80" y="170" fill="#f8fafc" font-family="Georgia, serif" font-size="64" font-weight="600">Luxury MPV</text>
+  <text x="80" y="220" fill="rgba(248,250,252,0.55)" font-family="system-ui, sans-serif" font-size="22">Sample interior · replace in Admin → Fleet</text>
+  <path d="M140 450h1320M220 450v-220c0-28 22-50 50-50h900c28 0 50 22 50 50v220M280 450v70h-44v-70M1470 450v70h-44v-70M360 410a34 34 0 1 0 0.1 0M1360 410a34 34 0 1 0 0.1 0M300 260h820" fill="none" stroke="#c9a44c" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
